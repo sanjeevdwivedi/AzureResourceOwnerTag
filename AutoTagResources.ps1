@@ -1,3 +1,17 @@
+Param(
+
+    [Parameter()]
+    [boolean]$WhatIf = $False,
+
+    [Parameter(Mandatory = $False)]
+    [string]$To="sanjeevd@microsoft.com",
+
+    [Parameter()]
+    [ValidateRange(1, 14)] 
+    [int32]$DayCount = 1
+
+)
+
 function Send-MailMessageEx {
     # Helper function for sending mails with attachments
     # From https://gallery.technet.microsoft.com/scriptcenter/Send-MailMessage-3a920a6d
@@ -546,15 +560,8 @@ function Send-MailMessageEx {
     }
 }
 
-Param(
-    [Parameter()]
-    [boolean]$WhatIf = $False,
-    [Parameter(Mandatory = $true)]
-    [string]$To,
-    [Parameter()]
-    [ValidateRange(1, 14)] 
-    [int32]$DayCount = 1
-)
+
+
 
 $days = $DayCount
 if ($DayCount -gt 0) {
@@ -623,7 +630,8 @@ $allRGs = (Get-AzureRmResourceGroup).ResourceGroupName
 
 Write-Warning "Found $($allRGs.Length) total RGs"
 
-$aliasedRGs = (Find-AzureRmResourceGroup -Tag @{ alias = $null }).Name
+#$aliasedRGs = (Find-AzureRmResourceGroup -Tag @{ alias = $null }).Name
+$aliasedRGs = (Find-AzureRmResourceGroup -Tag @{ Name = "alias"}).Name
 
 Write-Warning "Found $($aliasedRGs.Length) aliased RGs"
 
